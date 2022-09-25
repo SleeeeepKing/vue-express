@@ -12,9 +12,6 @@ Run yarn before starting code
 # install dependencies
 yarn
 
-# start server
-yarn run server
-
 # start website
 yarn dev
 ```

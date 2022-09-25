@@ -1,106 +1,57 @@
-const express = require('express'),
-    bodyParser = require('body-parser'),
-    studentData = require('./students.json');
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
-app.get('/hello', (req, res) => res.send('Hello World !'));
-
-app.post('/getStudents', (req, res) => {
-    /**
-     * type: greater equal less
-     * score: input -> 分数
-     */
-    const {type, score} = req.body,
-        [_type, _score] = checkBody(type, score),
-        resData = getData(_type,_score);
-
-    if (resData.length === 0){
-        res.send({
-            errorNo: 1001,
-            errorMsg: 'No Data'
-        })
-        return;
-    }
-
-    res.send({
-        errorNo: 0,
-        data: resData
-    });
+app.get('/getAnswer', (req, res) => {
+    res.send(getAnswer())
 })
 
-
-/*
-app.get('/word',(req,res) => {
-    let guess="";
-    let word=req.query.guess
-    console.log(req.query.guess)
-    if(word.length==guessword.length)
-    {
-        if(word==guessword)
-            res.send("correct!");
-        else{
-            for(let i=0;i<word.length;i++)
-            {
-                if(i>guessword.length)
-                    break;
-                if(word[i]==guessword[i])
-                    guess=guess+guessword[i]
-                else{
-                    let sign=1;
-                    for(let j=0;j<guessword.length;j++)
-                    {if(guessword[j]==word[i])
-                    {sign=0;
-                        break;}
-                    }
-                    if(sign==0)
-                        guess=guess+"*";
-                    if(sign==1)
-                        guess=guess+"#"
-                }
+app.get('/checkAnswer', (req, res) => {
+    const inputStr = req.query.answer;
+    if (inputStr.length < getAnswer().length){
+        res.send({
+            Flag: 1,
+            Msg: 'Please enter '+getAnswer().length+' words'
+        })
+    } else if (inputStr !== getAnswer()){
+        const inputArr = toArr(inputStr);
+        const ansArr = toArr(getAnswer());
+        const resArr = [];
+        inputArr.forEach((item, index)=>{
+            if (item === ansArr[index]){
+                resArr.push(item)
+            } else {
+                resArr.push('-')
             }
-            res.send(guess)
-        }
-
+        })
+        res.send({
+            Flag: 2,
+            resArr: resArr
+        })
+    } else{
+        res.send({
+            Flag: 0,
+            Msg: 'You are right !!!!!!'
+        });
     }
-    else
-        res.send("length not good");
-
-
-});
-*/
+})
 
 app.listen(8081, () => {
     console.log('Server is runing on PORT 8081!!!');
 })
 
-
-function checkBody(type, score) {
-
-    return [ checkType(type), checkScore(score)];
-
-    function checkType(type) {
-        return ['greater', 'equal', 'less'].includes(type) ? type : 'equal';
-    }
-
-    function checkScore(score) {
-        const _score = Number(score)
-        return isNaN(_score) ? 0 : _score;
-    }
+function getAnswer(){
+    return 'WELCOME'
 }
 
-function getData (type, score){
-    switch (type){
-        case 'greater':
-            return studentData.filter(item => item.score > score);
-        case 'equal':
-            return studentData.filter(item => item.score === score);
-        case 'less':
-            return studentData.filter(item => item.score < score);
-        default:
-            return [];
+function toArr(str){
+    const arr = [];
+    for (let i =0; i < str.length; i++){
+        arr.push(str.charAt(i));
     }
+    return arr;
 }
