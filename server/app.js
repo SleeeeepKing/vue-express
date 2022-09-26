@@ -25,7 +25,11 @@ app.get('/checkAnswer', (req, res) => {
             if (item === ansArr[index]){
                 resArr.push(item)
             } else {
-                resArr.push('-')
+                if (ansArr.includes(item)){
+                    resArr.push([item, 'yellow'])
+                } else{
+                    resArr.push('-')
+                }
             }
         })
         res.send({

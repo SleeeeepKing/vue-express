@@ -9,8 +9,8 @@
     <el-row v-for="items in historyStr">
       <div v-for="item in items">
         <el-tag type="danger" v-if="item === '-'">{{ item }}</el-tag>
-        <el-tag v-else-if="item === '#'">{{ item }}</el-tag>
-        <el-tag type="success" v-else>{{ item }}</el-tag>
+        <el-tag v-else-if="item.length === 2" type="warning">{{ item[0] }}</el-tag>
+        <el-tag v-else type="success">{{ item }}</el-tag>
       </div>
     </el-row>
   </div>
