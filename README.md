@@ -1,4 +1,6 @@
 # Vue-Express Project
+Use Vue3 and Express
+
 Group Member:
 
 Wenlei LUO, Yang WANG, Frédéric CHEN, Clément CHEN, Xin XU
