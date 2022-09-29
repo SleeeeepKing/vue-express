@@ -1,9 +1,6 @@
 # Vue-Express Project
 Use Vue3 and Express
 
-Group Member:
-
-Wenlei LUO, Yang WANG, Frédéric CHEN, Clément CHEN, Xin XU
 
 ## Setup & Start & Build
 
@@ -13,6 +10,12 @@ Run yarn before starting code
 ``` bash
 # install dependencies
 yarn
+
+# start server
+yarn server
+
+# designated ports for example 4000
+PORT=4000 yarn server
 
 # start website
 yarn dev

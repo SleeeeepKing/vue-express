@@ -6,13 +6,21 @@
         :maxlength="ansStr.length"
     ></el-input>
     <el-divider></el-divider>
-    <el-row v-for="items in historyStr">
-      <div v-for="item in items">
-        <el-tag type="danger" v-if="item === '-'">{{ item }}</el-tag>
-        <el-tag v-else-if="item.length === 2" type="warning">{{ item[0] }}</el-tag>
-        <el-tag v-else type="success">{{ item }}</el-tag>
-      </div>
-    </el-row>
+    <el-space direction="vertical" :size="20">
+      <el-row v-for="items in historyStr"
+      >
+        <div v-for="item in items">
+          <el-space :size="30">
+            <el-col>
+              <el-tag size="large" type="danger" v-if="item === '-'" style="min-width: 35px">{{ item }}</el-tag>
+              <el-tag v-else-if="item.length === 2" size="large" type="warning" style="min-width: 35px">{{ item[0] }}</el-tag>
+              <el-tag v-else size="large" type="success" style="min-width: 35px">{{ item }}</el-tag>
+            </el-col>
+          </el-space>
+        </div>
+      </el-row>
+    </el-space>
+
   </div>
 </template>
 
