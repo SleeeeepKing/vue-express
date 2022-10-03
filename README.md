@@ -6,17 +6,20 @@ Use Vue3 and Express
 
 Node require 16.x
 
-Run yarn before starting code
 ``` bash
+# Enter the directory
+cd client
+cd server
+
 # install dependencies
 yarn
 
-# start server
+# start server  //cd server
 yarn server
 
 # designated ports for example 4000
 PORT=4000 yarn server
 
-# start website
+# start website  //cd client
 yarn dev
 ```

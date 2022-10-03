@@ -3,8 +3,37 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const config = {
+    user: 'luo',
+    host: 'localhost',
+    database: 'MicroSer',
+    password: '666666',
+    dialect: 'postgres',
+    port: 5432
+}
+const pg = require('pg');
+const client = new pg.Client(config);
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+// 查询
+//每次进行query操作都要connect一遍
+client.connect(err => {
+    if (err) {
+        return console.error('连接postgreSQL数据库失败', err);
+    }
+//利用查询字符串进行查询
+    const sqlString = 'SELECT * FROM users';
+    client.query(sqlString, function (err, data) {
+        if (err) {
+            return console.error('查询失败', err);
+        } else {
+            console.log(data.rows[0]);
+        }
+        client.end();
+    });
+});
 
 app.get('/getAnswer', (req, res) => {
     console.log('进入端口')
