@@ -35,6 +35,8 @@ client.connect(err => {
     });
 });
 
+
+
 app.get('/getAnswer', (req, res) => {
     console.log('进入端口')
     res.send(getAnswer())
