@@ -89,17 +89,24 @@ app.get('/checkAnswer', (req, res) => {
 app.post('/addUser', (req, res) => {
     // express add user
     const user = req.body;
+    console.log(user);
     pool.connect((err, client, release) => {
         if (err) {
             return console.error(
                 'Error acquiring client', err.stack)
         }
-        const sqlString = 'insert into users (user_name) values ($1)';
-        client.query(sqlString, [user.username], function (err, data) {
+        const sqlString = 'insert into users (user_name, password) values ($1,$2)';
+        client.query(sqlString, [user.username,'123'], function (err, data) {
             if (err) {
+                res.send({
+                    Flag: 1,
+                }); // error
                 return console.error('插入失败', err);
             } else {
-                console.log(data);
+                console.log('插入成功！');
+                res.send({
+                    Flag: 0,
+                });
             }
             client.end();
         });

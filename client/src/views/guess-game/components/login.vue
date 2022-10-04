@@ -16,8 +16,10 @@
 
 <script lang="ts" setup>
 
-import {ref} from "vue";
+import {ref, defineEmits} from "vue";
 import {addUser} from "@/api/GuessGame";
+
+const emits = defineEmits(['openGame']);
 
 const form = ref({
   username: '',
@@ -25,7 +27,12 @@ const form = ref({
 
 const submit = async () => {
   console.log(form.value);
-  await addUser(form.value);
+  let flag = await addUser(form.value.username);
+  if (flag.data === 0) {
+    emits('openGame');
+  } else {
+    alert('Username already exists');
+  }
 };
 </script>
 

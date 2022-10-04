@@ -21,6 +21,6 @@ export function checkAnswer(answer: any) {
     return axios.get('/api/checkAnswer', { params: answer })
 }
 
-export function addUser(user: any) {
-    return axios.post('/api/addUser', qs.stringify(user))
+export function addUser(username: any) {
+    return axios.post('/api/addUser', qs.stringify(username))
 }
