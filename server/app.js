@@ -48,7 +48,6 @@ pool.connect((err, client, release) => {
 })
 
 app.get('/getAnswer', (req, res) => {
-    console.log('进入端口')
     res.send(getAnswer())
 })
 
@@ -89,14 +88,24 @@ app.get('/checkAnswer', (req, res) => {
 app.post('/addUser', (req, res) => {
     // express add user
     const user = req.body;
-    console.log(user);
     pool.connect((err, client, release) => {
         if (err) {
             return console.error(
                 'Error acquiring client', err.stack)
         }
-        const sqlString = 'insert into users (user_name, password) values ($1,$2)';
-        client.query(sqlString, [user.username,'123'], function (err, data) {
+        const sqlString = 'insert into users (username, password) values ($1,$2)';
+        //todo
+        client.query('select username from users', (err, result) => {
+            result.rows.forEach(item => {
+                if (item.username === user.username) {
+                    return res.send({
+                        Flag: 1,
+                        Msg: 'User already exists'
+                    })
+                }
+            });
+        })
+        client.query(sqlString, [user.username, '123'], function (err, result) {
             if (err) {
                 res.send({
                     Flag: 1,

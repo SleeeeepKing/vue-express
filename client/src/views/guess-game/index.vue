@@ -3,7 +3,7 @@
     <div style="margin-left: 20%; margin-right: 40%;">
       <h2>Welcome to Guess Game</h2>
       <login v-if="!showGame" @openGame="openGame"></login>
-      <score v-if="showGame"></score>
+      <score v-if="showGame" @closeGame="closeGame"></score>
       <game v-if="showGame"></game>
     </div>
   </div>
@@ -17,6 +17,10 @@ import Score from "@/views/guess-game/components/score.vue";
 const showGame = ref(false);
 function openGame() {
   showGame.value = true;
+}
+
+function closeGame() {
+  showGame.value = false;
 }
 </script>
 

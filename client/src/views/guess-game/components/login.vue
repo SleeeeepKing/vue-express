@@ -26,11 +26,11 @@ const form = ref({
 });
 
 const submit = async () => {
-  console.log(form.value);
-  let flag = await addUser(form.value.username);
-  if (flag.data === 0) {
+  let flag = await addUser(form.value);
+  if (flag.data.Flag === 0) {
     emits('openGame');
   } else {
+    console.log(flag)
     alert('Username already exists');
   }
 };
