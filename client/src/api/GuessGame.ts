@@ -20,3 +20,7 @@ export function getAnswer() {
 export function checkAnswer(answer: any) {
     return axios.get('/api/checkAnswer', { params: answer })
 }
+
+export function addUser(user: any) {
+    return axios.post('/api/addUser', qs.stringify(user))
+}

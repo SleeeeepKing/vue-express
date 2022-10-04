@@ -11,31 +11,41 @@ const config = {
     dialect: 'postgres',
     port: 5432
 }
-const pg = require('pg');
-const client = new pg.Client(config);
+const Pool = require('pg').Pool;
+const pool = new Pool({
+    user: 'luo',
+    host: 'localhost',
+    database: 'MicroSer',
+    password: '666666',
+    dialect: 'postgres',
+    port: 5432
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+const port = process.env.PORT || 3000
+
+app.listen(port, () => {
+    console.log('Server is runing on PORT ' + port + ' !!!');
+})
+
 // 查询
 //每次进行query操作都要connect一遍
-client.connect(err => {
+pool.connect((err, client, release) => {
     if (err) {
-        return console.error('连接postgreSQL数据库失败', err);
+        return console.error(
+            'Error acquiring client', err.stack)
     }
-//利用查询字符串进行查询
-    const sqlString = 'SELECT * FROM users';
-    client.query(sqlString, function (err, data) {
+    client.query('SELECT NOW()', (err, result) => {
+        release()
         if (err) {
-            return console.error('查询失败', err);
-        } else {
-            console.log(data.rows[0]);
+            return console.error(
+                'Error executing query', err.stack)
         }
-        client.end();
-    });
-});
-
-
+        console.log("Connected to Database !")
+    })
+})
 
 app.get('/getAnswer', (req, res) => {
     console.log('进入端口')
@@ -76,12 +86,26 @@ app.get('/checkAnswer', (req, res) => {
     }
 })
 
-const port = process.env.PORT || 3000
-
-
-app.listen(port, () => {
-    console.log('Server is runing on PORT ' + port + ' !!!');
+app.post('/addUser', (req, res) => {
+    // express add user
+    const user = req.body;
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error(
+                'Error acquiring client', err.stack)
+        }
+        const sqlString = 'insert into users (user_name) values ($1)';
+        client.query(sqlString, [user.username], function (err, data) {
+            if (err) {
+                return console.error('插入失败', err);
+            } else {
+                console.log(data);
+            }
+            client.end();
+        });
+    })
 })
+
 
 function getAnswer() {
     return 'WELCOME'
