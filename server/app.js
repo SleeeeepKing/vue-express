@@ -35,9 +35,8 @@ pool.connect((err, client, release) => {
     if (queryErr) {
       return console.error('Error executing query', queryErr.stack);
     }
-    return console.log('Connected to Database !');
+    console.log('Connected to Database !');
   });
-  return 0;
 });
 
 function getAnswer() {
@@ -104,7 +103,6 @@ app.post('/addUser', (req, res) => {
             Msg: 'User already exists',
           });
         }
-        return 0;
       });
     });
     client.query(sqlString, [user.username, '123'], (queryErr) => {
@@ -112,14 +110,13 @@ app.post('/addUser', (req, res) => {
         res.send({
           Flag: 1,
         }); // error
-        return console.error('插入失败', queryErr);
+        console.error('插入失败', queryErr);
       }
       console.log('插入成功！');
       res.send({
         Flag: 0,
       });
-      return client.end();
+      client.end();
     });
-    return 0;
   });
 });
