@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form">
+    <el-form :model="form" @submit.prevent>
       <el-form-item :label="'Please enter your name'">
         <el-input v-model="form.username" placeholder="Name"></el-input>
       </el-form-item>

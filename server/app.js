@@ -50,6 +50,7 @@ function toArr(str) {
   }
   return arr;
 }
+
 app.get('/getAnswer', (req, res) => {
   res.send(getAnswer());
 });

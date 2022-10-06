@@ -25,5 +25,6 @@ module.exports = {
     'prefer-regex-literals': 0,
     'import/no-extraneous-dependencies': 0,
     'consistent-return': 0,
+    'no-console': 0,
   },
 };
