@@ -4,6 +4,13 @@
       <el-form-item :label="'Please enter your name'">
         <el-input v-model="form.username" placeholder="Name"></el-input>
       </el-form-item>
+      <el-form-item v-show="false" :label="'Please enter your password'">
+        <el-input
+          v-model="form.password"
+          placeholder="Password"
+          type="password"
+        ></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">Submit</el-button>
       </el-form-item>
@@ -19,14 +26,15 @@
 
   const form = ref({
     username: '',
+    password: '123',
   });
 
   const submit = async () => {
-    const flag = await addUser(form.value);
-    if (flag.data.Flag === 0) {
+    const res = await addUser(form.value);
+    if (res.data.Flag === 0) {
       emits('openGame');
     } else {
-      alert('Username already exists');
+      alert(res.data.Msg);
     }
   };
 </script>

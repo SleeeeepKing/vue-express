@@ -87,6 +87,29 @@ app.get('/checkAnswer', (req, res) => {
   }
 });
 
+function checkUsername(username) {
+  return new Promise((resolve) => {
+    pool.connect((err, client, release) => {
+      if (err) {
+        return console.error('Error acquiring client', err.stack);
+      }
+      client.query(
+        `SELECT * FROM users WHERE username='${username}'`,
+        (queryErr, result) => {
+          release();
+          if (queryErr) {
+            return console.error('Error executing query', queryErr.stack);
+          }
+          if (result.rows.length === 0) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        }
+      );
+    });
+  });
+}
 app.post('/addUser', (req, res) => {
   // express add user
   const user = req.body;
@@ -96,28 +119,25 @@ app.post('/addUser', (req, res) => {
     }
     const sqlString = 'insert into users (username, password) values ($1,$2)';
     // todo
-    client.query('select username from users', (queryErr, result) => {
-      result.rows.forEach((item) => {
-        if (item.username === user.username) {
-          return res.send({
-            Flag: 1,
-            Msg: 'User already exists',
-          });
-        }
-      });
-    });
-    client.query(sqlString, [user.username, '123'], (queryErr) => {
-      if (queryErr) {
+    // check username
+    checkUsername(user.username).then((flag) => {
+      if (flag) {
         res.send({
           Flag: 1,
-        }); // error
-        console.error('插入失败', queryErr);
+          Msg: 'Username already exists',
+        });
+      } else {
+        client.query(sqlString, [user.username, user.password], (queryErr) => {
+          if (queryErr) {
+            return console.error('Error executing query', queryErr.stack);
+          }
+          res.send({
+            Flag: 0,
+            Msg: 'Add user success',
+          });
+          client.end();
+        });
       }
-      console.log('插入成功！');
-      res.send({
-        Flag: 0,
-      });
-      client.end();
     });
   });
 });
